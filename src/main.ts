@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { default as RedisStore } from 'connect-redis';
+import { RedisStore } from 'connect-redis';
 import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
 import { CoreModule } from './core/core.module';
@@ -15,7 +15,7 @@ async function bootstrap() {
   const config = app.get(ConfigService);
   const redis = app.get(RedisService);
 
-  app.use(cookieParser(config.getOrThrow<string>('COOKIE_SECRET')));
+  app.use(cookieParser(config.getOrThrow<string>('COOKIES_SECRET')));
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -28,7 +28,7 @@ async function bootstrap() {
       secret: config.getOrThrow<number>('SESSION_SECRET'),
       name: config.getOrThrow<number>('SESSION_NAME'),
       resave: false,
-      saveUnitialized: false,
+      saveUninitialized: false,
       cookie: {
         domain: config.getOrThrow<number>('SESSION_DOMAIN'),
         maxAge: ms(config.getOrThrow<StringValue>('SESSION_MAX_AGE')),
@@ -38,7 +38,7 @@ async function bootstrap() {
       },
       store: new RedisStore({
         client: redis,
-        prefix: config.getOrThrow<number>('SESSION_FOLDER'),
+        prefix: config.getOrThrow<string>('SESSION_FOLDER'),
       }),
     }),
   );
