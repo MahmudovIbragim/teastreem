@@ -2,7 +2,7 @@ import { Resolver, Query } from '@nestjs/graphql';
 import { AccountService } from './account.service';
 import { UserModel } from './models/user.model';
 
-@Resolver('Account')
+@Resolver(() => UserModel)
 export class AccountResolver {
   public constructor(private readonly accountService: AccountService) {}
 

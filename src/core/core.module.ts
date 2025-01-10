@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -8,6 +7,7 @@ import { ApolloDriver } from '@nestjs/apollo';
 import { getGraphqlConfig } from './config/graphql.config';
 import { RedisModule } from './redis/redis.module';
 import { AccountModule } from '../modules/auth/account/account.module';
+import { AccountResolver } from '../modules/auth/account/account.resolver';
 
 @Module({
   imports: [
@@ -20,6 +20,7 @@ import { AccountModule } from '../modules/auth/account/account.module';
       imports: [ConfigModule],
       useFactory: getGraphqlConfig,
       inject: [ConfigService],
+      resolvers: [AccountResolver],
     }),
     PrismaModule,
     RedisModule,
